@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hayfel Scene 2 - En Vivo</title>
+  <link rel="stylesheet" href="../assets/css/scene-base.css" />
+  <style>
+    .simple-scene { display:grid; place-items:center; height:100vh; color:#f4f0e7; text-transform:uppercase; letter-spacing:.1em; }
+    .simple-scene h1 { font-size: clamp(34px,8vw,90px); margin:0; text-shadow: 0 0 14px rgba(252,3,65,.7);} 
+  </style>
+</head>
+<body>
+  <main class="screen simple-scene">
+    <h1>En Vivo</h1>
+    <button class="hidden-scene-btn" data-next-scene="scene3.html" aria-label="Cambiar a la siguiente escena"></button>
+  </main>
+  <script src="../assets/js/scene-router.js"></script>
+</body>
+</html>
