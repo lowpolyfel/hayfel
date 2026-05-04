@@ -3,18 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hayfel Scene 3 - Volvemos Pronto</title>
+  <title>Hayfel Scene 3 - Finalizando Transmisión</title>
   <link rel="stylesheet" href="../assets/css/scene-base.css" />
-  <style>
-    .simple-scene { display:grid; place-items:center; height:100vh; color:#f4f0e7; text-transform:uppercase; letter-spacing:.1em; }
-    .simple-scene h1 { font-size: clamp(28px,7vw,80px); margin:0; text-align:center; text-shadow: 0 0 14px rgba(252,3,65,.7);} 
-  </style>
+  <link rel="stylesheet" href="../assets/css/scene1.css" />
 </head>
 <body>
-  <main class="screen simple-scene">
-    <h1>Volvemos<br>Pronto</h1>
+  <main class="screen">
+    <div class="bg-blur-layer" aria-hidden="true">
+      <div class="blur-orb orb1"></div>
+      <div class="blur-orb orb2"></div>
+      <div class="blur-orb orb3"></div>
+      <div class="blur-orb orb4"></div>
+    </div>
+
+    <div class="title-shadow">HAYFEL</div>
+
+    <section class="layout" aria-label="Hayfel crimson brutalist stream screen">
+      <div class="logo-wrap">
+        <div class="dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="dot blue"></span>
+        </div>
+
+        <div class="wordmark" data-text="HAYFEL">HAYFEL</div>
+
+        <div class="slashes" aria-hidden="true">
+          <span class="slash green"></span>
+          <span class="slash blue"></span>
+          <span class="slash yellow"></span>
+          <span class="slash red"></span>
+          <span class="slash cyan"></span>
+          <span class="slash yellow"></span>
+          <span class="slash green"></span>
+          <span class="slash red"></span>
+        </div>
+      </div>
+
+      <aside class="stream-panel">
+        <h1 class="stream-message" data-text="Finalizando transmisión">Finalizando<br>transmisión</h1>
+        <div class="stream-loader" aria-hidden="true">
+          <span class="loader-bar"></span>
+          <span class="loader-bar"></span>
+          <span class="loader-bar"></span>
+        </div>
+      </aside>
+    </section>
+
+    <div class="bloom"></div>
+    <div class="crt-lines"></div>
+    <div class="noise"></div>
+    <div class="grainy-noise"></div>
+    <div class="grainy-noise-2"></div>
+    <div class="flicker"></div>
+    <div class="crt-vignette"></div>
+
     <button class="hidden-scene-btn" data-next-scene="scene1.html" aria-label="Cambiar a la siguiente escena"></button>
   </main>
+
   <script src="../assets/js/scene-router.js"></script>
+  <script src="../assets/js/scene1.js"></script>
 </body>
 </html>
