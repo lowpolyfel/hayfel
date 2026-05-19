@@ -5,57 +5,94 @@
 
   const buttons = Array.from(document.querySelectorAll('.mode-btn'));
   const NS = 'http://www.w3.org/2000/svg';
-  const PALETTE = ['#590209', '#7f0220', '#a60321', '#cc1638', '#8c031c', '#ff6a00', '#f2b705', '#1f6fcf', '#f20530'];
 
-  const layers = Array.from({ length: 9 }, (_, i) => {
-    const path = document.createElementNS(NS, 'path');
-    path.classList.add('wave-path');
-    path.setAttribute('fill', PALETTE[i % PALETTE.length]);
-    path.setAttribute('fill-opacity', String(Math.min(0.96, 0.22 + i * 0.08)));
-    if (i === 8) path.setAttribute('fill-opacity', '0.98');
-    svg.appendChild(path);
-    return {
-      path,
-      baseY: 44 + i * 8.8,
-      amp: 8 + (i % 5) * 5,
-      speed: 0.6 + i * 0.11,
-      freq: 1.1 + (i % 4) * 0.36,
-      seed: Math.random() * Math.PI * 2,
-      skew: (Math.random() - 0.5) * 24,
-    };
-  });
+  const buildLayers = (count, palette, opacityFn) => {
+    svg.innerHTML = '';
+    return Array.from({ length: count }, (_, i) => {
+      const path = document.createElementNS(NS, 'path');
+      path.classList.add('wave-path');
+      path.setAttribute('fill', palette[i % palette.length]);
+      path.setAttribute('fill-opacity', String(opacityFn(i, count)));
+      svg.appendChild(path);
+      return {
+        path,
+        baseY: 28 + i * (90 / count),
+        amp: 6 + (i % 5) * 6,
+        speed: 0.45 + i * 0.12,
+        freq: 0.9 + (i % 4) * 0.42,
+        seed: Math.random() * Math.PI * 2,
+        skew: (Math.random() - 0.5) * 30,
+      };
+    });
+  };
 
-  const state = { mode: 'normal', t: 0, v: 0, amp: 0, target: 0 };
+  const palettes = {
+    normal: ['#ff7a93', '#ff5b76', '#ff3d5f', '#ff2148', '#f20530'],
+    physics: ['#ffd166', '#06d6a0', '#118ab2', '#7b2cbf', '#f72585', '#4cc9f0'],
+    vhs: ['#ff0054', '#00e5ff', '#ffe600', '#7cff00', '#ff6b00', '#9d4edd'],
+  };
 
-  const wavePath = (cfg, t, modeBoost) => {
+  const state = {
+    mode: 'normal',
+    t: 0,
+    v: 0,
+    amp: 0,
+    target: 0,
+    layers: [],
+  };
+
+  const wavePath = (cfg, t, style) => {
     const points = [];
-    const count = 7;
+    const count = style === 'vhs' ? 10 : 7;
     for (let i = 0; i <= count; i += 1) {
       const x = (600 / count) * i;
-      const phase = t * cfg.speed + cfg.seed + i * 0.75;
-      const wobble = Math.sin(phase * cfg.freq) * cfg.amp * modeBoost;
-      const chaos = Math.cos(phase * 1.37 + cfg.skew * 0.05) * cfg.amp * 0.52 * modeBoost;
-      points.push({ x, y: cfg.baseY + wobble + chaos });
+      const phase = t * cfg.speed + cfg.seed + i * (style === 'physics' ? 1.15 : 0.75);
+      const wobble = Math.sin(phase * cfg.freq) * cfg.amp;
+      const chaos = Math.cos(phase * (style === 'normal' ? 1.45 : 1.9) + cfg.skew * 0.05) * cfg.amp * (style === 'normal' ? 0.55 : 0.9);
+      const spike = style === 'vhs' ? Math.sin((phase + i) * 2.7) * cfg.amp * 0.35 : 0;
+      points.push({ x, y: cfg.baseY + wobble + chaos + spike });
     }
 
     let d = `M0,140 L0,${points[0].y.toFixed(2)}`;
     for (let i = 0; i < points.length - 1; i += 1) {
       const p0 = points[i];
       const p1 = points[i + 1];
-      const cx1 = p0.x + (p1.x - p0.x) * 0.35;
-      const cy1 = p0.y - cfg.skew * 0.08;
-      const cx2 = p0.x + (p1.x - p0.x) * 0.65;
-      const cy2 = p1.y + cfg.skew * 0.08;
+      const bend = style === 'physics' ? 0.2 : 0.35;
+      const cx1 = p0.x + (p1.x - p0.x) * bend;
+      const cy1 = p0.y - cfg.skew * (style === 'vhs' ? 0.14 : 0.08);
+      const cx2 = p0.x + (p1.x - p0.x) * (1 - bend);
+      const cy2 = p1.y + cfg.skew * (style === 'vhs' ? 0.14 : 0.08);
       d += ` C${cx1.toFixed(2)},${cy1.toFixed(2)} ${cx2.toFixed(2)},${cy2.toFixed(2)} ${p1.x.toFixed(2)},${p1.y.toFixed(2)}`;
     }
-    d += ' L600,140 Z';
-    return d;
+    return `${d} L600,140 Z`;
+  };
+
+  const applyModeScene = (mode) => {
+    overlay.dataset.mode = mode;
+    if (mode === 'normal') {
+      state.layers = buildLayers(10, palettes.normal, (i, total) => {
+        if (i === total - 1) return 1;
+        return Math.min(0.94, 0.2 + i * 0.08);
+      });
+      const front = state.layers[state.layers.length - 1];
+      front.path.setAttribute('fill', '#f20530');
+    }
+
+    if (mode === 'physics') {
+      state.layers = buildLayers(14, palettes.physics, (i, total) => Math.min(0.9, 0.28 + i * (0.62 / total)));
+      state.layers.forEach((l, i) => { l.amp += i * 0.9; l.freq += 0.1; });
+    }
+
+    if (mode === 'vhs') {
+      state.layers = buildLayers(12, palettes.vhs, (i, total) => Math.min(0.92, 0.24 + i * (0.7 / total)));
+      state.layers.forEach((l, i) => { l.speed += 0.22; l.skew *= 1.6; l.baseY += (i % 2 ? 2 : -2); });
+    }
   };
 
   const setMode = (mode) => {
     state.mode = mode;
-    overlay.dataset.mode = mode;
     buttons.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
+    applyModeScene(mode);
   };
 
   buttons.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
@@ -64,28 +101,33 @@
     state.t += 0.016;
 
     if (state.mode === 'physics') {
-      state.target = Math.sin(state.t * 1.3) * 18;
-      const force = (state.target - state.amp) * 0.1;
-      state.v = (state.v + force) * 0.88;
+      state.target = Math.sin(state.t * 2.2) * 22;
+      const force = (state.target - state.amp) * 0.11;
+      state.v = (state.v + force) * 0.89;
       state.amp += state.v;
     } else {
-      state.amp *= 0.9;
-      state.v *= 0.8;
+      state.amp *= 0.92;
+      state.v *= 0.84;
     }
 
-    const boost = state.mode === 'physics' ? 1.45 : state.mode === 'vhs' ? 1.2 : 1;
-    layers.forEach((layer, idx) => {
-      layer.path.setAttribute('d', wavePath(layer, state.t + idx * 0.16 + state.amp * 0.01, boost));
+    state.layers.forEach((layer, idx) => {
+      const tt = state.t + idx * 0.22 + (state.mode === 'physics' ? state.amp * 0.017 : 0);
+      layer.path.setAttribute('d', wavePath(layer, tt, state.mode));
+
       if (state.mode === 'physics') {
-        const dx = state.amp * (0.08 + idx * 0.02);
-        const dy = Math.cos(state.t * 2 + idx) * (1 + idx * 0.3);
-        layer.path.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        const dx = Math.sin(state.t * 1.6 + idx) * (4 + idx * 0.6);
+        const dy = Math.cos(state.t * 2.4 + idx) * (2 + idx * 0.22);
+        const rz = Math.sin(state.t + idx) * 2;
+        layer.path.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rz}deg)`;
+      } else if (state.mode === 'vhs') {
+        const scan = (idx % 3 - 1) * 1.8;
+        layer.path.style.transform = `translate3d(${scan}px, 0, 0)`;
       } else {
         layer.path.style.transform = '';
       }
     });
 
-    overlay.style.setProperty('--vhs-jitter', state.mode === 'vhs' ? `${((Math.random() - 0.5) * 3).toFixed(2)}px` : '0px');
+    overlay.style.setProperty('--vhs-jitter', state.mode === 'vhs' ? `${((Math.random() - 0.5) * 4.4).toFixed(2)}px` : '0px');
     requestAnimationFrame(animate);
   };
 
