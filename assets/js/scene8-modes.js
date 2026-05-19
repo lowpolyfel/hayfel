@@ -27,7 +27,7 @@
   };
 
   const palettes = {
-    normal: ['#ff7a93', '#ff5b76', '#ff3d5f', '#ff2148', '#f20530'],
+    normal: ['#ff9ab1', '#ff6f93', '#ff4f79', '#ff2f61', '#f20530'],
     physics: ['#ffd166', '#06d6a0', '#118ab2', '#7b2cbf', '#f72585', '#4cc9f0'],
     vhs: ['#ff0054', '#00e5ff', '#ffe600', '#7cff00', '#ff6b00', '#9d4edd'],
   };
@@ -72,20 +72,23 @@
     if (mode === 'normal') {
       state.layers = buildLayers(10, palettes.normal, (i, total) => {
         if (i === total - 1) return 1;
-        return Math.min(0.94, 0.2 + i * 0.08);
+        return Math.min(0.9, 0.38 + i * 0.06);
       });
       const front = state.layers[state.layers.length - 1];
       front.path.setAttribute('fill', '#f20530');
+      front.path.setAttribute('fill-opacity', '1');
+      front.path.style.mixBlendMode = 'normal';
+      front.path.style.filter = 'drop-shadow(0 0 10px rgba(242,5,48,.35))';
     }
 
     if (mode === 'physics') {
       state.layers = buildLayers(14, palettes.physics, (i, total) => Math.min(0.9, 0.28 + i * (0.62 / total)));
-      state.layers.forEach((l, i) => { l.amp += i * 0.9; l.freq += 0.1; });
+      state.layers.forEach((l, i) => { l.amp += i * 0.9; l.freq += 0.1; l.path.style.filter=''; l.path.style.mixBlendMode=''; });
     }
 
     if (mode === 'vhs') {
       state.layers = buildLayers(12, palettes.vhs, (i, total) => Math.min(0.92, 0.24 + i * (0.7 / total)));
-      state.layers.forEach((l, i) => { l.speed += 0.22; l.skew *= 1.6; l.baseY += (i % 2 ? 2 : -2); });
+      state.layers.forEach((l, i) => { l.speed += 0.22; l.skew *= 1.6; l.baseY += (i % 2 ? 2 : -2); l.path.style.filter=''; l.path.style.mixBlendMode=''; });
     }
   };
 
