@@ -20,7 +20,7 @@ body { display: grid; place-items: center; }
 }
 .wave-layer { position: absolute; left: -12%; width: 124%; height: 128%; bottom: -12px; z-index: 2; perspective: 900px; }
 .wave-layer svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.wave-layer path { transform-origin: center bottom; will-change: transform, filter, d; transition: filter .3s ease; mix-blend-mode: multiply; }
+.wave-layer path { transform-origin: center bottom; will-change: transform, filter, d; transition: filter .3s ease; mix-blend-mode: soft-light; }
 
 .mode-strip {
   position: absolute;
@@ -46,19 +46,19 @@ body { display: grid; place-items: center; }
   inset: 0;
   z-index: 5;
   pointer-events: none;
-  opacity: .08;
-  mix-blend-mode: multiply;
+  opacity: .12;
+  mix-blend-mode: soft-light;
   background-image:
-    repeating-linear-gradient(0deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 2px, transparent 2px 5px);
 }
 
 .overlay[data-mode="physics"] .wave-layer {
-  filter: saturate(0.95) contrast(1.1) brightness(0.85);
+  filter: saturate(1.02) contrast(1.08) brightness(0.94);
 }
 .overlay[data-mode="physics"] .wave-path {
   filter: drop-shadow(0 12px 14px rgba(0,0,0,.18));
-  mix-blend-mode: multiply;
+  mix-blend-mode: soft-light;
 }
 
 .overlay[data-mode="vhs"] {
@@ -66,7 +66,7 @@ body { display: grid; place-items: center; }
   animation: vhsFrame .11s steps(2) infinite;
 }
 .overlay[data-mode="vhs"] .wave-layer {
-  filter: saturate(0.88) contrast(1.12) hue-rotate(0deg) brightness(0.82);
+  filter: saturate(0.98) contrast(1.08) hue-rotate(-2deg) brightness(0.92);
 }
 .overlay[data-mode="vhs"] .wave-layer svg {
   transform: skewX(-0.7deg);

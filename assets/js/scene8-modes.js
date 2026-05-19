@@ -27,9 +27,9 @@
   };
 
   const palettes = {
-    normal: ['#2a070d', '#4a0a14', '#6b1020', '#8e1730', '#f20530'],
-    physics: ['#1e0a12', '#311325', '#3f1d34', '#4a2640', '#5a2e4b', '#6a3655'],
-    vhs: ['#2a0f1e', '#3a1630', '#472140', '#563053', '#6a3b5e', '#7a4768'],
+    normal: ['#7a1b2f', '#942342', '#ad2c54', '#c93667', '#f20530'],
+    physics: ['#6f1f32', '#7e2a43', '#8f3452', '#a23d61', '#b44972', '#c45a83'],
+    vhs: ['#7b2444', '#8f2f58', '#a33a6b', '#b8477f', '#cb5891', '#de6ca4'],
   };
 
   const state = {
@@ -72,7 +72,7 @@
     if (mode === 'normal') {
       state.layers = buildLayers(10, palettes.normal, (i, total) => {
         if (i === total - 1) return 1;
-        return Math.min(0.88, 0.5 + i * 0.04);
+        return Math.min(0.92, 0.42 + i * 0.05);
       });
       const front = state.layers[state.layers.length - 1];
       front.path.setAttribute('fill', '#f20530');
