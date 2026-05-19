@@ -27,9 +27,9 @@
   };
 
   const palettes = {
-    normal: ['#ff9ab1', '#ff6f93', '#ff4f79', '#ff2f61', '#f20530'],
-    physics: ['#ffd166', '#06d6a0', '#118ab2', '#7b2cbf', '#f72585', '#4cc9f0'],
-    vhs: ['#ff0054', '#00e5ff', '#ffe600', '#7cff00', '#ff6b00', '#9d4edd'],
+    normal: ['#c96a7e', '#d85a77', '#e14a6f', '#eb3a62', '#f20530'],
+    physics: ['#9b4f5f', '#7a4f63', '#6d4b78', '#5f4f88', '#b33b69', '#7b5a8e'],
+    vhs: ['#b23a62', '#8a4f7a', '#6c5b88', '#5f6a8f', '#a14f5a', '#7d4f86'],
   };
 
   const state = {
@@ -72,7 +72,7 @@
     if (mode === 'normal') {
       state.layers = buildLayers(10, palettes.normal, (i, total) => {
         if (i === total - 1) return 1;
-        return Math.min(0.9, 0.38 + i * 0.06);
+        return Math.min(0.82, 0.3 + i * 0.052);
       });
       const front = state.layers[state.layers.length - 1];
       front.path.setAttribute('fill', '#f20530');
@@ -82,12 +82,12 @@
     }
 
     if (mode === 'physics') {
-      state.layers = buildLayers(14, palettes.physics, (i, total) => Math.min(0.9, 0.28 + i * (0.62 / total)));
+      state.layers = buildLayers(14, palettes.physics, (i, total) => Math.min(0.78, 0.24 + i * (0.48 / total)));
       state.layers.forEach((l, i) => { l.amp += i * 0.9; l.freq += 0.1; l.path.style.filter=''; l.path.style.mixBlendMode=''; });
     }
 
     if (mode === 'vhs') {
-      state.layers = buildLayers(12, palettes.vhs, (i, total) => Math.min(0.92, 0.24 + i * (0.7 / total)));
+      state.layers = buildLayers(12, palettes.vhs, (i, total) => Math.min(0.8, 0.22 + i * (0.46 / total)));
       state.layers.forEach((l, i) => { l.speed += 0.22; l.skew *= 1.6; l.baseY += (i % 2 ? 2 : -2); l.path.style.filter=''; l.path.style.mixBlendMode=''; });
     }
   };
