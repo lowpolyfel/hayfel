@@ -5,13 +5,14 @@
 
   const buttons = Array.from(document.querySelectorAll('.mode-btn'));
   const NS = 'http://www.w3.org/2000/svg';
-  const PALETTE = ['#590209', '#7f0220', '#a60321', '#cc1638', '#f20530', '#ff6a00', '#f2b705', '#1f6fcf', '#35a8ff'];
+  const PALETTE = ['#590209', '#7f0220', '#a60321', '#cc1638', '#8c031c', '#ff6a00', '#f2b705', '#1f6fcf', '#f20530'];
 
   const layers = Array.from({ length: 9 }, (_, i) => {
     const path = document.createElementNS(NS, 'path');
     path.classList.add('wave-path');
     path.setAttribute('fill', PALETTE[i % PALETTE.length]);
-    path.setAttribute('fill-opacity', String(0.22 + i * 0.07));
+    path.setAttribute('fill-opacity', String(Math.min(0.96, 0.22 + i * 0.08)));
+    if (i === 8) path.setAttribute('fill-opacity', '0.98');
     svg.appendChild(path);
     return {
       path,
