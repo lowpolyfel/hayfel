@@ -48,17 +48,17 @@ body { display: grid; place-items: center; }
   place-items: center;
   font-family: "Avenir Next", "Montserrat", "Poppins", "Segoe UI", Arial, sans-serif;
   font-size: clamp(2.4rem, 6vw, 5rem);
-  font-weight: 600;
-  letter-spacing: .14em;
+  font-weight: 400;
+  letter-spacing: .03em;
   color: #ffffff;
-  text-transform: uppercase;
+  text-transform: lowercase;
   opacity: 0;
   pointer-events: none;
   text-shadow: 0 2px 14px rgba(0,0,0,.2);
 }
 
 .overlay[data-mode="title"] .hayfel-title { opacity: 1; }
-.overlay[data-mode="title"] .wave-layer { opacity: .18; filter: saturate(.65) brightness(.8); }
+.overlay[data-mode="title"] .wave-layer { opacity: 1; filter: none; }
 .overlay[data-mode="title"]::before { display: none; }
 
 .overlay::after {
