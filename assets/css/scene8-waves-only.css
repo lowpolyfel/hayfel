@@ -40,6 +40,27 @@ body { display: grid; place-items: center; }
   cursor: pointer;
 }
 
+.hayfel-title {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  font-family: "Avenir Next", "Montserrat", "Poppins", "Segoe UI", Arial, sans-serif;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: .14em;
+  color: #ffffff;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 2px 14px rgba(0,0,0,.2);
+}
+
+.overlay[data-mode="title"] .hayfel-title { opacity: 1; }
+.overlay[data-mode="title"] .wave-layer { opacity: .18; filter: saturate(.65) brightness(.8); }
+.overlay[data-mode="title"]::before { display: none; }
+
 .overlay::after {
   content: "";
   position: absolute;

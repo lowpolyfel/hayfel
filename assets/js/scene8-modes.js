@@ -30,6 +30,7 @@
     normal: ['#7a1b2f', '#942342', '#ad2c54', '#c93667', '#f20530'],
     physics: ['#6f1f32', '#7e2a43', '#8f3452', '#a23d61', '#b44972', '#c45a83'],
     vhs: ['#7b2444', '#8f2f58', '#a33a6b', '#b8477f', '#cb5891', '#de6ca4'],
+    title: ['#4f1322', '#6f1f32', '#8c2f48', '#b23f62', '#f20530'],
   };
 
   const state = {
@@ -90,6 +91,11 @@
       state.layers = buildLayers(12, palettes.vhs, (i, total) => Math.min(0.8, 0.22 + i * (0.46 / total)));
       state.layers.forEach((l, i) => { l.speed += 0.22; l.skew *= 1.6; l.baseY += (i % 2 ? 2 : -2); l.path.style.filter=''; l.path.style.mixBlendMode=''; });
     }
+
+    if (mode === 'title') {
+      state.layers = buildLayers(8, palettes.title, (i, total) => Math.min(0.7, 0.25 + i * (0.32 / total)));
+      state.layers.forEach((l) => { l.amp *= 0.45; l.speed *= 0.55; l.path.style.filter=''; l.path.style.mixBlendMode=''; });
+    }
   };
 
   const setMode = (mode) => {
@@ -117,7 +123,12 @@
       const tt = state.t + idx * 0.22 + (state.mode === 'physics' ? state.amp * 0.017 : 0);
       layer.path.setAttribute('d', wavePath(layer, tt, state.mode));
 
-      if (state.mode === 'physics') {
+      if (state.mode === 'title') {
+        layer.path.style.transform = '';
+        if (idx % 2 === 0) {
+          layer.path.setAttribute('d', wavePath(layer, 0.2 + idx * 0.11, 'normal'));
+        }
+      } else if (state.mode === 'physics') {
         const dx = Math.sin(state.t * 1.6 + idx) * (4 + idx * 0.6);
         const dy = Math.cos(state.t * 2.4 + idx) * (2 + idx * 0.22);
         const rz = Math.sin(state.t + idx) * 2;
